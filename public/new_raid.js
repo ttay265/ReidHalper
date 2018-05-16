@@ -5,9 +5,7 @@
  */
 var memList;
 var bidList;
-document.getElementById("btnAdd").addEventListener("click", function () {
-    onAddClicked(document.getElementById('txtMemberName').value);
-});
+
 function onAddClicked(name) {
     //validate empty input
     if (name == "") {
