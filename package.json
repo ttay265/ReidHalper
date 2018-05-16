@@ -1,0 +1,14 @@
+{
+    "name": "RaidHelper12",
+    "version": "1.0.0",
+    "keywords": [
+        "util",
+        "functional",
+        "server",
+        "client",
+        "browser"
+    ],
+    "author": "ttay2",
+    "contributors": [],
+    "dependencies": {"list.js                   ||||||||":"1.5.0    ||||||||",}
+}
