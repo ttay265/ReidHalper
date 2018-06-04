@@ -12,7 +12,9 @@ and open the template in the editor.
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
-        <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script> 
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script> 
         <link rel="stylesheet" href="main.css">
         <script type="text/javascript" src="new_raid.js"></script> 
     </head>
@@ -26,7 +28,7 @@ and open the template in the editor.
                 <div class="col-lg-4">
                     <div style="margin: 10px 0 50px 0">
                         <h5>Thêm người vào raid</h5>
-                        <div style="margin-bottom: 20px" class='form-inline mt-2 mt-md-0'>
+                        <div style="margin-bottom: 20px" class='form-inline mt-2'>
                             <input class='form-control col-lg-9  mr-sm-2'  maxlength="16" id="txtMemberName" placeholder="Enter member's name..."/>
                             <button class='btn btn-outline-info my-2 my-sm-0' onclick="onAddClicked(document.getElementById('txtMemberName').value)" >
                                 <span class="fa fa-plus"></span>
@@ -37,34 +39,50 @@ and open the template in the editor.
 
                     <div id="bidForm">
                         <div class="form-row mt-2">
-                            <div class="col-lg-5 mb-3">
-                                <input  type="text" class="form-control col-lg" id="txtLootName" placeholder="Tên item (thích thì nhập)">
+                            <div class="col-lg-6 mb-3">
+                                <input  type="text" class="form-control" id="txtLootName" placeholder="Tên item (thích thì nhập)">
                             </div>
-                            <div class="col-md-6" style="line-height: 2">
+                            <div class="col-lg-6" style="line-height: 2">
                                 <h5 id="txtBidderName" style="line-height: 2;margin-left: 5px"></h5>
                             </div>
                         </div>
-                        <div class="form-row">
-                            <div class="col-md-2 mb-3">
+                        <div class="form-row mb-3">
+
+                            <div class="col-lg-3 mb-3">
                                 <input type="number" class="form-control" id="txtGold" placeholder="Vàng"/>
 
                             </div>
-                            <div class="col-md-2 mb-3">
+                            <div class="col-lg-3 mb-3">
                                 <input readonly type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                        maxlength = "2" class="form-control" id="txtSilver" placeholder="Bạc"/>
 
                             </div>
-                            <div class="col-md-2 mb-1">
+                            <div class="col-lg-3 mb-1">
                                 <input readonly type="number" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
                                        maxlength = "2" class="form-control" id="txtCopper" placeholder="Xu"/>
                             </div>
-                            <div class="col-md-2 mb-1">
+
+
+                            <div class="col-lg-3 mb-1">
                                 <button  class='btn btn-outline-success' onclick="addBid()" >
                                     <span class="fa fa-gavel"></span>
                                 </button>
                             </div>
                         </div>
                     </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr><th  class="col-lg-13" colspan="3" style="text-align: center">Danh sách Đồ Bid</th>
+                            </tr>
+                            <tr class="d-flex">
+                                <th class="col-lg-5" style="text-align: left">Tên Ingame</th>
+                                <th class="col-lg-4" style="text-align: right">Giá bid</th>
+                                <th class="col-lg-3" style="text-align: center">Tên item</th>
+                            </tr>
+                        </thead>
+                        <tbody id='bidList'> 
+                        </tbody>
+                    </table>
                 </div>
                 <div class="col-lg-8" style="max-width: 900px">
                     <table class="table table-hover">
@@ -79,7 +97,7 @@ and open the template in the editor.
                                 <th class="col-lg-3" style="text-align: right">Tổng tiền bid</th>
                             </tr>
                         </thead>
-                        <tbody id='tbody'> 
+                        <tbody id='raidMem'> 
                         </tbody>
                     </table>
                 </div>

@@ -3,8 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var memList;
-var bidList;
+var memList = [];
+var bidList = [];
 
 function onAddClicked(name) {
     //validate empty input
@@ -31,7 +31,7 @@ function addMem(mem) {
         reloadList();
         //clear input
 //        document.getElementById('txtMemberName').value = "";
-        $(":input").val("");
+        $("#txtLootName").attr('value', '');
     } else {
         window.alert("Full");
     }
@@ -39,9 +39,29 @@ function addMem(mem) {
 
 
 
+function reloadBidList() {
+    //get DOM of table
+    var tbody = document.getElementById('bidList');
+    //clear old data on View
+    tbody.innerHTML = "";
+    //Add new tr with data
+    for (var i = 0; i < bidList.length; i++) {
+        var tr = "<tr onclick='setSelectRow(this)' class='d-flex clickable-row'>";
+        tr += "<td class='col-lg-5'>" + bidList[i].bidder + "</td>"; //add cell
+        tr += "<td class='col-lg-4' style='text-align: right'>" + parseAmount(bidList[i].amount) + "</td>"; //add cell
+        var lootName = bidList[i].lootName !== '' ? bidList[i].lootName : '-';
+        tr += "<td class='col-lg-3' style='text-align: center'>" + lootName + "</td>"; //add cell
+        tr += "</tr>";
+        tbody.innerHTML += tr;
+    }
+    document.getElementById('txtBidderName').innerHTML = "";
+    $("#bidForm :text :number").attr('value', '');
+    //add footer
+}
+
 function reloadList() {
     //get DOM of table
-    var tbody = document.getElementById('tbody');
+    var tbody = document.getElementById('raidMem');
     //clear old data on View
     tbody.innerHTML = "";
     //Add new tr with data
@@ -60,20 +80,21 @@ function reloadList() {
         tbody.innerHTML += tr;
     }
     document.getElementById('txtBidderName').innerHTML = "";
-    $("#bidForm :text :number").attr('value', '');
+    $("#bidForm :input").attr('value', '');
     //add footer
 }
+
 function setShared(checkbox) {
     var indx = checkbox.parentNode.parentNode.cells[0].innerHTML;
     memList[indx - 1].isShared = checkbox.checked;
 }
 
 function setSelectRow(row) {
-    var tbody = document.getElementById('tbody');
+    var tbody = document.getElementById('raidMem');
     for (var i = 0; i < tbody.rows.length; i++) {
         if (tbody.rows[i] === row) {
             tbody.rows[i].classList.add('table-success');
-            document.getElementById('txtBidderName').innerHTML = '- ' + tbody.rows[i].cells[1].innerHTML;
+            document.getElementById('txtBidderName').innerHTML = tbody.rows[i].cells[1].innerHTML;
 
         } else {
             tbody.rows[i].classList.remove('table-success');
@@ -82,7 +103,7 @@ function setSelectRow(row) {
 }
 
 function getSelectRow() {
-    var tbody = document.getElementById('tbody');
+    var tbody = document.getElementById('raidMem');
     for (var i = 0; i < tbody.rows.length; i++) {
         if (tbody.rows[i].classList.contains('table-success')) {
             return tbody.rows[i];
@@ -91,10 +112,10 @@ function getSelectRow() {
     return null;
 }
 
-function getSharedMems(bidderIndx) {
+function getSharedMems(bidder) {
     var sum = 0;
     for (var i = 0; i < memList.length; i++) {
-        if (memList[i].isShared && i !== bidderIndx - 1) {
+        if (memList[i].isShared && bidder !== memList[i].name) {
             sum++;
         }
     }
@@ -108,7 +129,7 @@ function addBid() {
         window.alert("Chọn người bid ?!?");
         return;
     }
-    var bidderIndx = parseInt(selectedRow.cells[0].innerHTML);
+    var bidder = selectedRow.cells[1].innerHTML;
     //get loot name
     var lootName = document.getElementById('txtLootName').value;
     //get loot amount
@@ -129,23 +150,31 @@ function addBid() {
         window.alert("Nhập tiền bid ?!?");
         return;
     }
+    var bidAction = {};
+    bidAction.share = [];
 
     //add to memList
-    var share = amount / getSharedMems(bidderIndx);
+    var share = amount / getSharedMems(bidder);
     for (var i = 0; i < memList.length; i++) {
-        if (i === bidderIndx - 1) {
+        if (memList[i].name === bidder) {
             memList[i].totalBid += amount;
         } else {
             if (memList[i].isShared) {
                 memList[i].earn += share;
+                bidAction.share.push(memList[i].name);
             }
         }
     }
     //create bid
 
+    bidAction.bidder = bidder;
+    bidAction.amount = amount;
+    bidAction.shareAmount = share;
+    bidAction.lootName = lootName;
+    bidList.push(bidAction);
     //reload list
-
     reloadList();
+    reloadBidList();
 }
 
 
