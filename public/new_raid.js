@@ -26,17 +26,30 @@ function initMemList() {
 
 function addMem(mem) {
     if (memList.length < 12) {
-        memList.push(mem);
-        //reloadList
-        reloadList();
-        //clear input
+        if (validateMemName(mem.name)) {
+            memList.push(mem);
+            //reloadList
+            reloadList();
+            //clear input
 //        document.getElementById('txtMemberName').value = "";
-        $("#txtLootName").attr('value', '');
+            $("#txtLootName").attr('value', '');
+        } else {
+             window.alert("Mem trùng tên!");
+        }
+
     } else {
         window.alert("Full");
     }
 }
 
+function validateMemName(name) {
+    for (var i = 0; i < memList.length; i++) {
+        if (name === memList[i].name) {
+            return false;
+        }
+    }
+    return true;
+}
 
 
 function reloadBidList() {
