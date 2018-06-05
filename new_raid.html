@@ -72,7 +72,11 @@ and open the template in the editor.
                     </div>
                     <table class="table table-hover">
                         <thead>
-                            <tr><th  class="col-lg-13" colspan="3" style="text-align: center">Danh sách Đồ Bid</th>
+                            <tr class="d-flex">
+                                <th class="col-lg-2"></th>
+                                <th  class="col-lg-8" colspan="3" style="text-align: center">Danh sách Đồ Bid</th>
+                                <th class="col-lg-2 nopadding text-right align-middle">
+                                    <button id="btnBidDelete" hidden onclick="onDeleteBidClicked()" class="btn btn-sm lg-icon-btn btn-no-outline btn-outline-danger far fa-trash-alt"/></th>
                             </tr>
                             <tr class="d-flex">
                                 <th class="col-lg-5" style="text-align: left">Tên Ingame</th>

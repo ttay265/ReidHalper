@@ -26,18 +26,31 @@ function initMemList() {
 
 function addMem(mem) {
     if (memList.length < 12) {
-        memList.push(mem);
-        //reloadList
-        reloadList();
-        //clear input
-//        document.getElementById('txtMemberName').value = "";
-        $("#txtLootName").attr('value', '');
+        if (validateMemName(mem.name)) {
+            memList.push(mem);
+            //reloadList
+
+            //clear input
+//            document.getElementById('txtMemberName').value = "";
+            $("#txtMemberName").val("");
+            reloadList();
+        } else {
+            window.alert("Mem trùng tên!");
+        }
+
     } else {
         window.alert("Full");
     }
 }
 
-
+function validateMemName(name) {
+    for (var i = 0; i < memList.length; i++) {
+        if (name === memList[i].name) {
+            return false;
+        }
+    }
+    return true;
+}
 
 function reloadBidList() {
     //get DOM of table
@@ -46,17 +59,78 @@ function reloadBidList() {
     tbody.innerHTML = "";
     //Add new tr with data
     for (var i = 0; i < bidList.length; i++) {
-        var tr = "<tr onclick='setSelectRow(this)' class='d-flex clickable-row'>";
+        var tr = "<tr onclick='setSelectBidRow(this)' class='d-flex clickable-row'>";
         tr += "<td class='col-lg-5'>" + bidList[i].bidder + "</td>"; //add cell
         tr += "<td class='col-lg-4' style='text-align: right'>" + parseAmount(bidList[i].amount) + "</td>"; //add cell
         var lootName = bidList[i].lootName !== '' ? bidList[i].lootName : '-';
         tr += "<td class='col-lg-3' style='text-align: center'>" + lootName + "</td>"; //add cell
+        tr += "<td hidden>" + bidList[i].bidId + "</td>"; //add cell
         tr += "</tr>";
         tbody.innerHTML += tr;
     }
     document.getElementById('txtBidderName').innerHTML = "";
-    $("#bidForm :text :number").attr('value', '');
+    $("#btnBidDelete").attr('hidden', '');
     //add footer
+}
+
+function getSelectedBidRowIndx() {
+    var tbody = document.getElementById('bidList');
+    for (var i = 0; i < tbody.rows.length; i++) {
+        if (tbody.rows[i].classList.contains('table-danger')) {
+            return i;
+        }
+    }
+    return null;
+}
+
+function setSelectBidRow(row) {
+    var tbody = document.getElementById('bidList');
+    if (row.classList.contains('table-danger')) {
+        row.classList.remove('table-danger');
+        $("#btnBidDelete").attr('hidden', '');
+        return;
+    }
+    for (var i = 0; i < tbody.rows.length; i++) {
+        if (tbody.rows[i] === row) {
+            tbody.rows[i].classList.add('table-danger');
+            $("#btnBidDelete").removeAttr('hidden');
+        } else {
+            tbody.rows[i].classList.remove('table-danger');
+        }
+    }
+}
+
+function onDeleteBidClicked() {
+    var selectedRow = getSelectedBidRowIndx();
+    if (selectedRow !== null) {
+        var removingData = bidList[selectedRow];
+        deleteBid(removingData);
+    }
+}
+
+function onDeleteBidClicked() {
+    var selectedRow = getSelectedBidRowIndx();
+    if (selectedRow !== null) {
+        deleteBid(selectedRow);
+        reloadList();
+        reloadBidList();
+    }
+}
+
+function deleteBid(selectedRow) {
+    var remvData = bidList[selectedRow];
+    for (var i = 0; i < memList.length; i++) {
+        if (memList[i].name === remvData.bidder) {
+            memList[i].totalBid -= remvData.amount;
+        } else {
+            for (j = 0; j < remvData.share.length; j++) {
+                if (memList[i].name === remvData.share[j]) {
+                    memList[i].earn -= remvData.shareAmount;
+                }
+            }
+        }
+    }
+    bidList.splice(selectedRow, 1);
 }
 
 function reloadList() {
@@ -80,7 +154,7 @@ function reloadList() {
         tbody.innerHTML += tr;
     }
     document.getElementById('txtBidderName').innerHTML = "";
-    $("#bidForm :input").attr('value', '');
+    $("#bidForm :input").val("");
     //add footer
 }
 
@@ -91,6 +165,11 @@ function setShared(checkbox) {
 
 function setSelectRow(row) {
     var tbody = document.getElementById('raidMem');
+    if (row.classList.contains('table-success')) {
+        row.classList.remove('table-success');
+        document.getElementById('txtBidderName').innerHTML = "";
+        return;
+    }
     for (var i = 0; i < tbody.rows.length; i++) {
         if (tbody.rows[i] === row) {
             tbody.rows[i].classList.add('table-success');
@@ -101,6 +180,8 @@ function setSelectRow(row) {
         }
     }
 }
+
+
 
 function getSelectRow() {
     var tbody = document.getElementById('raidMem');

@@ -13,3 +13,17 @@ input::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 }
+
+.btn-no-outline {
+    border: none !important;
+}
+
+.lg-icon-btn {
+    font-size: 1.66rem;
+    padding: .05rem .3rem;
+}
+
+.nopadding {
+    padding:0.22rem !important;
+    margin: 0 !important;
+}
